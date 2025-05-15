@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Gin Project</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }
+        .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
+        pre { background-color: #eee; padding: 10px; border-radius: 4px; white-space: pre-wrap; word-wrap: break-word; }
+        .nav-links a { margin-right: 15px; text-decoration: none; color: #007bff; }
+        .nav-links a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Go Gin Project - Home</h1>
+        <div class="nav-links">
+            <a href="/login">Login Page</a>
+            <a href="/swagger/index.html" target="_blank">Swagger API Docs</a>
+        </div>
+        <hr>
+        <h2>Test Ping API (Requires Login & Token)</h2>
+        <p>To test the Ping API, please log in first to get a token. Then, use a tool like Postman or curl to send a GET request to <code>/api/v1/ping</code> with an Authorization header: <code>Bearer YOUR_TOKEN</code>.</p>
+        <p>Alternatively, you can use your browser's developer console after logging in:</p>
+        <button onclick="testPing()">Test Ping API</button>
+        <h3>Response:</h3>
+        <pre id="pingResponse">Click the button to test.</pre>
+    </div>
+
+    <script>
+        async function testPing() {
+            const token = localStorage.getItem('jwtToken');
+            const responseElement = document.getElementById('pingResponse');
+
+            if (!token) {
+                responseElement.textContent = 'Error: No JWT token found. Please log in first.';
+                alert('Please log in first to get a token.');
+                window.location.href = '/login';
+                return;
+            }
+
+            responseElement.textContent = 'Pinging...';
+
+            try {
+                const response = await fetch('/api/v1/ping', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    responseElement.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    responseElement.textContent = `Error: ${response.status} - ${data.error || 'Failed to ping'}`;
+                }
+            } catch (error) {
+                console.error('Error testing ping:', error);
+                responseElement.textContent = 'Error: Could not connect to the server or an unexpected error occurred.';
+            }
+        }
+    </script>
+</body>
+</html>
+
