@@ -10,7 +10,7 @@ A boilerplate **Go + Gin** backend featuring:
 - Auto-migrated schema & initial admin seeding  
 - Swagger UI docs  
 - Static HTML login & home pages  
-- Ready to integrate with a [Next.js + shadcn](https://github.com/shadcn/shadcn-ui) frontend
+- Ready to integrate with a [Next.js + shadcn](https://github.com/shadcn/shadcn-ui) frontend. Example demo with extended features: [NextjsKickstart](https://github.com/johngai19/NextjsKickstart)
 
 ## Features
 
@@ -45,3 +45,8 @@ A boilerplate **Go + Gin** backend featuring:
 git clone https://github.com/your-org/GoGinKickstart.git
 cd GoGinKickstart
 go mod tidy
+```
+
+## Example Frontend
+
+For a full-featured Next.js + shadcn integration showcasing authentication flows, data fetching, and UI components, check out [NextjsKickstart](https://github.com/johngai19/NextjsKickstart).
