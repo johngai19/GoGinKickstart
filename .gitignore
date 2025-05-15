@@ -23,4 +23,6 @@ go.work
 go.work.sum
 
 # env file
-.env
+# env files should be ignored, however, I did not include it in the template
+# because it is not a standard file name and can be used for other purposes
+#.env
