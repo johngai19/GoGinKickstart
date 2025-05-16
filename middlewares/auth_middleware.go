@@ -7,7 +7,7 @@ import (
 	"go-gin-project/config"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 // Claims represents the JWT claims.
