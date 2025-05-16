@@ -4,14 +4,10 @@ import (
 	"log"
 
 	"go-gin-project/config"
-	"go-gin-project/controllers"
-	"go-gin-project/middlewares"
 	"go-gin-project/models"
 	"go-gin-project/routes"
 	"go-gin-project/services"
-	"github.com/gin-contrib/cors"
 
-	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
 
@@ -40,42 +36,19 @@ func main() {
 
 	config.InitConfig()
 	db := models.InitDB()
-	defer db.Close()
+	defer func() {
+		sqlDB, _ := db.DB()
+		sqlDB.Close()
+	}()
 
 	// Create initial admin user if not exists
 	userService := services.NewUserService(db)
-	err = userService.CreateInitialAdminUser()
-	if err != nil {
+	if err := userService.CreateInitialAdminUser(); err != nil {
 		log.Fatalf("Failed to create initial admin user: %v", err)
 	}
 
-	r := gin.Default()
-	//Todo Allow CORS for all origins, methods, and headers, Must be changed in production
+	r := routes.NewRouter(db)
 
-
-	r.Use(cors.Default())
-
-
-	// Serve static files (HTML, CSS, JS for login and ping pong test)
-	r.Static("/static", "./static")
-	r.GET("/", func(c *gin.Context) {
-		c.File("./static/index.html")
-	})
-	r.GET("/login", func(c *gin.Context) {
-		c.File("./static/login.html")
-	})
-
-	apiV1 := r.Group("/api/v1")
-	{
-		authController := controllers.NewAuthController(db)
-		pingController := controllers.NewPingController()
-
-		routes.SetupAuthRoutes(apiV1, authController)
-		routes.SetupPingRoutes(apiV1, pingController, middlewares.AuthMiddleware())
-		routes.SetupSwaggerRoutes(r) // Swagger routes on root path
-	}
-
-	
 	log.Printf("Server starting on port %s", config.AppConfig.Port)
 	if err := r.Run(":" + config.AppConfig.Port); err != nil {
 		log.Fatalf("Failed to run server: %v", err)

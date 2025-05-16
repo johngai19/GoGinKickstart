@@ -4,32 +4,33 @@ import (
 	"log"
 
 	"go-gin-project/config"
-
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
-// InitDB initializes the database connection.
+// InitDB initializes the SQLite database connection and runs migrations.
 func InitDB() *gorm.DB {
-	dbPath := config.AppConfig.DBPath
-	db, err := gorm.Open("sqlite3", dbPath)
+	cfg := config.AppConfig
+
+	// Use the single DBPath from your config
+	db, err := gorm.Open(sqlite.Open(cfg.DBPath), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
-		// Ensure the directory exists if using a relative path like ./data/gogin.db
-		// For simplicity, this example uses a root-level db file.
+		log.Fatalf("failed to connect to database: %v", err)
 	}
 
-	// Migrate the schema
-	db.AutoMigrate(&User{})
+	// Auto-migrate your models
+	if err := db.AutoMigrate(&User{}); err != nil {
+		log.Fatalf("auto-migrate failed: %v", err)
+	}
 
 	DB = db
 	log.Println("Database initialized and schema migrated.")
 	return DB
 }
 
-// GetDB returns the current database instance.
+// GetDB returns the global DB instance.
 func GetDB() *gorm.DB {
 	return DB
 }
