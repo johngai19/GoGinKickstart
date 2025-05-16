@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"os"
 
 	"go-gin-project/config"
 	"go-gin-project/controllers"
@@ -70,12 +69,9 @@ func main() {
 		routes.SetupSwaggerRoutes(r) // Swagger routes on root path
 	}
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-	log.Printf("Server starting on port %s", port)
-	if err := r.Run(":" + port); err != nil {
+	
+	log.Printf("Server starting on port %s", config.AppConfig.Port)
+	if err := r.Run(":" + config.AppConfig.Port); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
 	}
 }
