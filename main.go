@@ -9,6 +9,7 @@ import (
 	"go-gin-project/models"
 	"go-gin-project/routes"
 	"go-gin-project/services"
+	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -49,6 +50,11 @@ func main() {
 	}
 
 	r := gin.Default()
+	//Todo Allow CORS for all origins, methods, and headers, Must be changed in production
+
+
+	r.Use(cors.Default())
+
 
 	// Serve static files (HTML, CSS, JS for login and ping pong test)
 	r.Static("/static", "./static")
