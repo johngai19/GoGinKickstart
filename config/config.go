@@ -63,4 +63,3 @@ func InitConfig() {
 	}
 	log.Println("Configuration loaded successfully")
 }
-

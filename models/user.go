@@ -2,7 +2,7 @@ package models
 
 import (
 	"golang.org/x/crypto/bcrypt"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // User represents a user in the system
@@ -27,4 +27,3 @@ func (u *User) HashPassword() error {
 func (u *User) CheckPassword(password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
 }
-

@@ -40,7 +40,11 @@ func main() {
 
 	config.InitConfig()
 	db := models.InitDB()
-	defer db.Close()
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatalf("Failed to get database instance: %v", err)
+	}
+	defer sqlDB.Close()
 
 	// Create initial admin user if not exists
 	userService := services.NewUserService(db)
@@ -79,4 +83,3 @@ func main() {
 		log.Fatalf("Failed to run server: %v", err)
 	}
 }
-

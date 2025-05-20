@@ -38,4 +38,3 @@ func (pc *PingController) Ping(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, PingSuccessResponse{Message: "pong", User: userStr})
 }
-

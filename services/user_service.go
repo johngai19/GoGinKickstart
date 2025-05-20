@@ -7,7 +7,7 @@ import (
 	"go-gin-project/config"
 	"go-gin-project/models"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // UserService provides user-related services
@@ -70,4 +70,3 @@ func (s *UserService) GetUserByUsername(username string) (*models.User, error) {
 	}
 	return &user, nil
 }
-
