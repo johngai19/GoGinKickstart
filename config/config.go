@@ -15,6 +15,7 @@ type Config struct {
 	JWTSecret     string
 	JWTExpiration time.Duration
 	DBPath        string
+	Port		string
 }
 
 var AppConfig *Config
@@ -55,11 +56,17 @@ func InitConfig() {
 		log.Println("DB_PATH not set, using default: ./gogin.db")
 	}
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	AppConfig = &Config{
 		AdminPassword: adminPassword,
 		JWTSecret:     jwtSecret,
 		JWTExpiration: time.Hour * time.Duration(jwtExpHours),
 		DBPath:        dbPath,
+		Port:          port,
 	}
 	log.Println("Configuration loaded successfully")
 }
